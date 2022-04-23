@@ -29,4 +29,12 @@ class AdminController extends Controller
         $order->update(['status' => $order->status === 'pending' ? 'completed' : 'pending']);
         return response()->json(['status' => 'success', 'message' => 'Successful'], 200);
     }
+
+    public function showWithStatus($id)
+    {
+        $order = Order::where('uuid', $id)->with('order_status')->first();
+        if (!$order) return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
+
+        return response()->json(['status' => 'success', 'message' => 'successful', 'data' => $order], 200);
+    }
 }
