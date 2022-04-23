@@ -14,5 +14,13 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return "craft-logo";
+});
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get("/orders", 'AdminController@index');
+    $router->get("/order/toggle/{id}", 'AdminController@toggleOrderStatus');
+    $router->get("order/{order}", 'OrderController@show');
+    $router->patch("order/{order}", 'OrderController@update');
+    $router->post("/order", 'OrderController@store');
 });
