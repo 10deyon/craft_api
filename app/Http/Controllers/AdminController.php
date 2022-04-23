@@ -12,7 +12,13 @@ class AdminController extends Controller
     {
         $order = Order::with('order_status')->paginate(20);
 
-        return response()->json(['status' => 'success', 'message' => 'Successful', 'data' => $order], 200);
+        return response()
+            ->json([
+                'status' => 'success', 
+                'message' => 'Successful', 
+                'data' => $order
+            ],
+        200);
     }
 
     public function toggleOrderStatus($id)

@@ -14,7 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return "craft-logo";
+    return response()->json("craft-logo");
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
