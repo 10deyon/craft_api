@@ -20,7 +20,8 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get("/orders", 'AdminController@index');
     $router->get("/orders/{id}", 'AdminController@showWithStatus');
-    $router->get("/order/toggle/{id}", 'AdminController@toggleOrderStatus');
+    $router->post("/order_completed", 'AdminController@orderStatus');
+    
     $router->get("order/{order}", 'OrderController@show');
     $router->patch("order/{order}", 'OrderController@update');
     $router->post("/order", 'OrderController@store');
