@@ -10,7 +10,8 @@
         "illuminate/mail": "^8.83",
         "laravel/lumen-framework": "^8.3.1",
         "moontoast/math": "^1.2",
-        "ramsey/uuid": "^4.2"
+        "ramsey/uuid": "^4.2",
+        "stripe/stripe-php": "^7.125"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -14,9 +14,10 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->uuid('uuid')->unique();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('tagline');
+            $table->double('amount', 4, 2)->nullable();
             $table->string('email');
             $table->string('phone');
             $table->timestamps();

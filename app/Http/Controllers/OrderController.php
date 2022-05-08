@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    const LOGO_AMOUNT = 25;
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),  [
@@ -20,7 +22,7 @@ class OrderController extends Controller
         ]);
 
         if ($validator->fails()) return response()->json(['status' => "error", "message" => $validator->errors()->first()], 400);
-        
+
         $order = Order::create([
             "name" => $request->name,
             "tagline" => $request->tagline,
@@ -29,12 +31,11 @@ class OrderController extends Controller
         ]);
 
         $order->order_status()->create(["status" => 'pending']);
-        // Mail::to($request->email)->queue(new OrderCreated($order)); //->later(now()->addMinutes(10), new OrderCreated($order));
-        // dispatch(Mail::to($request->email)->send(new OrderCreated($order)));
+        // Mail::to($request->email)->send(new OrderCreated($order));
 
         return response()->json(['status' => 'success', 'message' => 'Created successfully', 'data' => $order], 201);
     }
-    
+
     public function show($order)
     {
         $order = Order::find($order);
@@ -42,7 +43,7 @@ class OrderController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'successful', 'data' => $order], 200);
     }
-    
+
     public function update(Request $request, $order)
     {
         $validator = Validator::make($request->all(),  [
@@ -51,17 +52,17 @@ class OrderController extends Controller
             "phone" => "string",
             "email" => "confirmed"
         ]);
-        
+
         if ($validator->fails()) return response()->json(['status' => "error", "message" => $validator->errors()->first()], 400);
 
-        $order = Order::where('uuid', $order)->update([
+        $order = Order::where('id', $order)->update([
             "name" => $request->name,
             "tagline" => $request->tagline,
             "phone" => $request->phone,
             "email" => $request->email,
         ]);
 
-        // dispatch(Mail::to($request->email)->send(new OrderCreated($request->all())));
+        // Mail::to($request->email)->send(new OrderCreated($order));
 
         return response()->json(['status' => 'success', 'message' => "Updated successfully"], 200);
     }

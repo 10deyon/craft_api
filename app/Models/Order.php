@@ -13,22 +13,15 @@ class Order extends Model
         'name',
         'tagline',
         'email',
-        'phone'
+        'phone',
+        'amount'
     ];
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = ['uuid'];
-
-    public function order($id)
-    {
-        return $this->with($this->with)->findOrFail($id);
+    public function order_status() {
+        return $this->hasOne(OrderStatus::class, 'order_id', 'id');
     }
 
-    public function order_status() {
-        return $this->hasOne(OrderStatus::class, 'order_uuid', 'uuid');
+    public function transaction () {
+        return $this->hasOne(Transaction::class);
     }
 }

@@ -13,9 +13,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request, $status=null)
     {
-        $order = Order::with('order_status')->paginate(20);
+        if ($request->status) {
+            $order = Order::with(['order_status' => function ($q) use ($status) {
+                $q->where('order_status.status', $status);
+            }])->paginate(20);
+        } else {
+            $order = Order::with('order_status')->paginate(20);
+        }
 
         return response()
             ->json([
@@ -30,13 +36,13 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(),  [
             "order_id" => "required|string",
-            "zip_file" => "required"
+            "zip_file" => "string"
         ]);
 
         if ($validator->fails()) return response()->json(['status' => "error", "message" => $validator->errors()->first()], 400);
         
         try {
-            $order_status = OrderStatus::where('order_uuid', $request->order_id)->first();
+            $order_status = OrderStatus::where('order_id', $request->order_id)->first();
             if (!$order_status) return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
 
             $result = $order_status->with('order')->first();
@@ -53,7 +59,7 @@ class AdminController extends Controller
 
     public function showWithStatus($id)
     {
-        $order = Order::where('uuid', $id)->with('order_status')->first();
+        $order = Order::where('id', $id)->with('order_status')->first();
         if (!$order) return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
 
         return response()->json(['status' => 'success', 'message' => 'successful', 'data' => $order], 200);

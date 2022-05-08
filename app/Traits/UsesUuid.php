@@ -15,8 +15,11 @@ trait UsesUuid
     public static function boot()
     {
         parent::boot();
-        self::creating(function ($model) {
-            $model->uuid = Str::uuid()->toString();
+        
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = Str::uuid()->toString();
+            }
         });
     }
 
@@ -30,15 +33,15 @@ trait UsesUuid
         return false;
     }
 
-    /**
-     * Get the primary key for the model.
-     *
-     * @return string
-     */
-    public function getKeyName()
-    {
-        return 'uuid';
-    }
+    // /**
+    //  * Get the primary key for the model.
+    //  *
+    //  * @return string
+    //  */
+    // public function getKeyName()
+    // {
+    //     return 'uuid';
+    // }
 
     /**
      * Get the auto-incrementing key type.

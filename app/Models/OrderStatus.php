@@ -11,7 +11,7 @@ class OrderStatus extends Model
    
    protected $fillable = [
       'status',
-      'order_uuid',
+      'order_id',
    ];
 
    protected $hidden = ['created_at', 'updated_at'];
