@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->uuid('order_id');
-            $table->string('payment_status');
+            $table->string('payment_status')->nullable();
             $table->json('stripe_request');
             $table->json('stripe_response');
             $table->foreign('order_id')

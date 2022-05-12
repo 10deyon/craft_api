@@ -12,8 +12,4 @@ class Transaction extends Model
         'stripe_request',
         'stripe_response'
     ];
-
-    public function order() {
-        return $this->belongsTo(Order::class);
-    }
 }

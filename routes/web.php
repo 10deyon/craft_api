@@ -18,15 +18,13 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
+    $router->post("/order_payment", 'OrderController@store');
     $router->get("/all-orders", 'AdminController@index');
     $router->get("/orders/{id}", 'AdminController@showWithStatus');
     $router->post("/order_completed", 'AdminController@orderStatus');
-
     $router->get("order/{order}", 'OrderController@show');
-    $router->patch("order/{order}", 'OrderController@update');
-    $router->post("/order", 'OrderController@store');
     
-    $router->post('/make-payment', 'TransactionController@makePayment');
-    $router->post('/stripe-payment', 'TransactionController@chargeCard');
-
+    // $router->post('/make-payment', 'TransactionController@makePayment');
+    // $router->post('/stripe-payment', 'TransactionController@chargeCard');
+    // $router->patch("order/{order}", 'OrderController@update');
 });

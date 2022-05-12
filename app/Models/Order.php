@@ -20,8 +20,4 @@ class Order extends Model
     public function order_status() {
         return $this->hasOne(OrderStatus::class, 'order_id', 'id');
     }
-
-    public function transaction () {
-        return $this->hasOne(Transaction::class);
-    }
 }

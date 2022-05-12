@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function index(Request $request, $status=null)
+    public function index(Request $request)
     {
         if ($request->status) {
-            $order = Order::with(['order_status' => function ($q) use ($status) {
-                $q->where('order_status.status', $status);
+            $order = Order::with(['order_status' => function ($query) use ($request) {
+                $query->where('order_status.status', $request->status);
             }])->paginate(20);
         } else {
             $order = Order::with('order_status')->paginate(20);
@@ -43,11 +43,12 @@ class AdminController extends Controller
         
         try {
             $order_status = OrderStatus::where('order_id', $request->order_id)->first();
+            
             if (!$order_status) return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
-
+            
             $result = $order_status->with('order')->first();
         
-            // Mail::to($result->order->email)->send(new OrderCompleted($result->order));
+            Mail::to($result->order->email)->send(new OrderCompleted($result->order));
             
             $order_status->update(['status' => 'completed']);
             
