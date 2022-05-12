@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    const LOGO_AMOUNT = 25;
-    const CURRENCY = 'usd', CENT = 100;
     public $stripe;
 
     public function __construct(StripeService $stripe)
@@ -60,11 +58,6 @@ class OrderController extends Controller
             return response()->json(['status' => 'error', 'message' => 'an error occured'], 500);
         }
         
-    }
-
-    private function stripePayment()
-    {
-
     }
 
     public function show($order)
