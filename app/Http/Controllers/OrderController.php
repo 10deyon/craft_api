@@ -44,7 +44,7 @@ class OrderController extends Controller
     
             $order->order_status()->create(["status" => 'pending']);
             
-            // Mail::to($request->email)->send(new OrderCreated($order));
+            Mail::to($request->email)->send(new OrderCreated($order));
     
             $request->request->add(['order_id' => $order->id]);
             $clientSecret = $this->stripe->handle($request);
@@ -67,27 +67,4 @@ class OrderController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'successful', 'data' => $order], 200);
     }
-
-    // public function update(Request $request, $order)
-    // {
-    //     $validator = Validator::make($request->all(),  [
-    //         "name" => "string",
-    //         "tagline" => "string",
-    //         "phone" => "string",
-    //         "email" => "confirmed"
-    //     ]);
-
-    //     if ($validator->fails()) return response()->json(['status' => "error", "message" => $validator->errors()->first()], 400);
-
-    //     $order = Order::where('id', $order)->update([
-    //         "name" => $request->name,
-    //         "tagline" => $request->tagline,
-    //         "phone" => $request->phone,
-    //         "email" => $request->email,
-    //     ]);
-
-    //     // Mail::to($request->email)->send(new OrderCreated($order));
-
-    //     return response()->json(['status' => 'success', 'message' => "Updated successfully"], 200);
-    // }
 }

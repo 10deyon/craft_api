@@ -13,18 +13,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+$router->get('/', function () {
     return response()->json("craft-logo");
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post("/order_payment", 'OrderController@store');
     $router->get("/all-orders", 'AdminController@index');
     $router->get("/orders/{id}", 'AdminController@showWithStatus');
-    $router->post("/order_completed", 'AdminController@orderStatus');
-    $router->get("order/{order}", 'OrderController@show');
-    
-    // $router->post('/make-payment', 'TransactionController@makePayment');
-    // $router->post('/stripe-payment', 'TransactionController@chargeCard');
-    // $router->patch("order/{order}", 'OrderController@update');
+    $router->post("/order_payment", 'OrderController@store');
+    $router->post("/verify_passcode", 'AdminController@verifyPasscode');
+    $router->get("/complete_order/{id}", 'AdminController@completeOrder');
 });
