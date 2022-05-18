@@ -18,14 +18,18 @@ class AdminController extends Controller
         if (! $checkPasscode) {
             return response()->json(['status' => 'error', 'message' => 'Invalid passcode'], 400);
         }
+
+        $validator = Validator::make($request->all(), [
+            "status" => (isset($request->status)) ? "in:all,pending,completed" : "",
+        ]);
+        if ($validator->fails()) return response()->json(['status' => "error", "message" => $validator->errors()->first()], 400);
         
-        if ($request->status) {
-            $order = Order::with(['order_status' => function ($query) use ($request) {
-                $query->where('order_status.status', $request->status);
-            }])->paginate(20);
-        } else {
-            $order = Order::with('order_status')->paginate(20);
-        }
+        $order = OrderStatus::query();
+        $order->when(isset($request->status) && ($request->status != "all"), function ($query) use ($request) {
+            $query->where("status", "=", $request->status);
+        });
+        
+        $order = $order->with('order')->latest()->paginate(20);
 
         return response()
             ->json([
