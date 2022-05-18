@@ -13,6 +13,12 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
+        $checkPasscode = $this->checkPasscode($request);
+
+        if (! $checkPasscode) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid passcode'], 400);
+        }
+        
         if ($request->status) {
             $order = Order::with(['order_status' => function ($query) use ($request) {
                 $query->where('order_status.status', $request->status);
@@ -30,8 +36,14 @@ class AdminController extends Controller
         200);
     }
 
-    public function showWithStatus($id)
+    public function showWithStatus(Request $request, $id)
     {
+        $checkPasscode = $this->checkPasscode($request);
+
+        if (! $checkPasscode) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid passcode'], 400);
+        }
+
         $order = Order::where('id', $id)->with('order_status')->first();
         if (!$order) return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
 
@@ -55,8 +67,13 @@ class AdminController extends Controller
         return response()->json(['status' => 'error', 'message' => 'Invalid passcode'], 400);
     }
 
-    public function completeOrder($id)
+    public function completeOrder(Request $request, $id)
     {
+        $checkPasscode = $this->checkPasscode($request);
+        if (! $checkPasscode) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid passcode'], 400);
+        }
+
         $result = OrderStatus::where("order_id", $id)->first();
         if($result) {
             $result->update([
@@ -66,5 +83,12 @@ class AdminController extends Controller
             return response()->json(['status' => 'success', 'message' => 'successful'], 200);
         }
         return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
+    }
+
+    private function checkPasscode($request) {
+        $hashedPassword = Passcode::first()->passcode;
+        $result = Hash::check($request->passcode, $hashedPassword);
+
+        return $result;
     }
 }
