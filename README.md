@@ -58,13 +58,14 @@ Documentation can be found, after initial setup, for HTTP in [Swagger](http://lo
    `docker compose up -d`
    
 3. Open API container's terminal
-   `docker ps` - copy container ID
-   `docker compose exec -it "container_id" bash`
+   `docker ps` - copy container ID </br>
+   `docker compose exec -it "container_id" bash` </br>
+   `docker compose exec -it "container_id" sh/shell`
 
-4. Deploy database schema into the MySQL database.
+4. Deploy database schema into the MySQL database. </br>
    `php artisan migrate`
 
-5. Seed the database with default data.
+5. Seed the database with default data. </br>
    `no seed available for the project`
 
 ### Running the project
@@ -74,9 +75,9 @@ After the initial setup there's no additional work needed, project is running in
 - The REST API is available on your local machine on `http://localhost:8080`.
 
 You can stop it by executing `docker compose stop`, and you can resume it by `docker compose start`
-  * if any change(s) is made, run the following
-      `docker-compose down`
-      `docker-compose build`
+  * if any change(s) is made, run the following </br>
+      `docker-compose down` </br>
+      `docker-compose build` </br>
       `docker compose up -d`
 
 
